@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Smart Inventory and Order Management System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <a href="index.html">Smart Inventory</a>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+                    <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+                    <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+                    <li><a href="suppliers.html"><i class="fas fa-truck"></i> Suppliers</a></li>
+                    <li><a href="reports.html" class="active"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="d-flex justify-between align-center mb-3">
+                <h1>Reports</h1>
+                <button class="btn btn-primary" id="generateReportBtn">
+                    <i class="fas fa-plus"></i> Generate New Report
+                </button>
+            </div>
+            
+            <!-- Report Categories -->
+            <div class="mb-4">
+                <div class="d-flex gap-2 mb-3">
+                    <button class="btn btn-primary active" data-category="all">All Reports</button>
+                    <button class="btn btn-primary" data-category="Sales">Sales</button>
+                    <button class="btn btn-primary" data-category="Inventory">Inventory</button>
+                    <button class="btn btn-primary" data-category="Customer">Customer</button>
+                    <button class="btn btn-primary" data-category="Supplier">Supplier</button>
+                    <button class="btn btn-primary" data-category="Financial">Financial</button>
+                </div>
+            </div>
+            
+            <!-- Reports List -->
+            <div id="reportsList">
+                <!-- Reports will be populated here by JavaScript -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Generate Report Modal -->
+    <div class="modal-overlay" id="generateReportModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Generate New Report</h2>
+                <button class="modal-close" id="closeGenerateReportModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="reportForm">
+                    <div class="form-group">
+                        <label for="reportName">Report Name</label>
+                        <input type="text" id="reportName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reportType">Report Type</label>
+                        <select id="reportType" required>
+                            <option value="">Select Report Type</option>
+                            <option value="Sales">Sales Report</option>
+                            <option value="Inventory">Inventory Report</option>
+                            <option value="Customer">Customer Report</option>
+                            <option value="Supplier">Supplier Report</option>
+                            <option value="Financial">Financial Report</option>
+                            <option value="Custom">Custom Report</option>
+                        </select>
+                    </div>
+                    
+                    <div id="salesReportParams" class="report-params" style="display: none;">
+                        <div class="form-row">
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="salesStartDate">Start Date</label>
+                                    <input type="date" id="salesStartDate">
+                                </div>
+                            </div>
+                            <div class="form-col">
+                                <div class="form-group">
+                                    <label for="salesEndDate">End Date</label>
+                                    <input type="date" id="salesEndDate">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="inventoryReportParams" class="report-params" style="display: none;">
+                        <div class="form-group">
+                            <label for="inventoryCategory">Product Category</label>
+                            <select id="inventoryCategory">
+                                <option value="">All Categories</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Furniture">Furniture</option>
+                                <option value="Accessories">Accessories</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" id="showLowStock">
+                                Show only low stock items
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div id="customerReportParams" class="report-params" style="display: none;">
+                        <div class="form-group">
+                            <label for="customerType">Customer Type</label>
+                            <select id="customerType">
+                                <option value="">All Customers</option>
+                                <option value="Regular">Regular</option>
+                                <option value="VIP">VIP</option>
+                                <option value="Wholesale">Wholesale</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="purchaseMinimum">Minimum Purchase Amount</label>
+                            <input type="number" id="purchaseMinimum" min="0" step="0.01" value="0">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="fileFormat">File Format</label>
+                        <select id="fileFormat" required>
+                            <option value="PDF">PDF</option>
+                            <option value="Excel">Excel</option>
+                            <option value="CSV">CSV</option>
+                            <option value="HTML">HTML</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reportNotes">Notes</label>
+                        <textarea id="reportNotes" rows="2"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="cancelReportBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveReportBtn">Generate Report</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Report Preview Modal -->
+    <div class="modal-overlay" id="reportPreviewModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="reportPreviewTitle">Report Preview</h2>
+                <button class="modal-close" id="closeReportPreviewModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="report-preview">
+                    <div class="report-header mb-3">
+                        <h2 id="previewReportName"></h2>
+                        <p class="text-muted" id="previewReportDate"></p>
+                    </div>
+                    
+                    <div id="reportContent" class="mb-3">
+                        <!-- Report content will be populated here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="downloadReportBtn">Download</button>
+                <button class="btn btn-secondary" id="closePreviewBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Smart Inventory and Order Management System</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script>
+        // Initialize database on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            DB.init();
+            loadReports('all');
+            setupEventListeners();
+        });
+
+        // Load reports based on category
+        function loadReports(category) {
+            const reportsList = document.getElementById('reportsList');
+            reportsList.innerHTML = ''; // Clear existing reports
+            
+            const reports = DB.getAll('reports');
+            
+            // Filter reports by category if not 'all'
+            const filteredReports = category === 'all' ? 
+                reports : 
+                reports.filter(report => report.reportType === category);
+            
+            // Sort reports by generation date (newest first)
+            filteredReports.sort((a, b) => new Date(b.generatedAt) - new Date(a.generatedAt));
+            
+            if (filteredReports.length > 0) {
+                filteredReports.forEach(report => {
+                    // Create report card
+                    const reportCard = document.createElement('div');
+                    reportCard.className = 'report-card';
+                    
+                    // Set icon based on report type
+                    let iconClass = '';
+                    switch(report.reportType) {
+                        case 'Sales': iconClass = 'fa-chart-line'; break;
+                        case 'Inventory': iconClass = 'fa-boxes-stacked'; break;
+                        case 'Customer': iconClass = 'fa-users'; break;
+                        case 'Supplier': iconClass = 'fa-truck'; break;
+                        case 'Financial': iconClass = 'fa-money-bill'; break;
+                        case 'Custom': iconClass = 'fa-file-lines'; break;
+                        default: iconClass = 'fa-file';
+                    }
+                    
+                    // Format date
+                    const reportDate = new Date(report.generatedAt);
+                    const formattedDate = reportDate.toLocaleDateString() + ' ' + reportDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                    
+                    reportCard.innerHTML = `
+                        <div class="report-icon">
+                            <i class="fas ${iconClass}"></i>
+                        </div>
+                        <div class="report-content">
+                            <h3 class="report-title">${report.reportName}</h3>
+                            <div class="report-meta">
+                                <span><i class="fas fa-calendar"></i> ${formattedDate}</span>
+                                <span><i class="fas fa-file"></i> ${report.fileFormat}</span>
+                                <span><i class="fas fa-tag"></i> ${report.reportType}</span>
+                            </div>
+                            <p class="report-description">${report.notes || 'No description provided'}</p>
+                        </div>
+                        <div class="report-actions">
+                            <button class="btn btn-sm btn-primary view-report" data-id="${report.id}">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn btn-sm btn-success download-report" data-id="${report.id}">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                        </div>
+                    `;
+                    
+                    reportsList.appendChild(reportCard);
+                });
+                
+                // Add event listeners to buttons
+                document.querySelectorAll('.view-report').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const reportId = this.getAttribute('data-id');
+                        viewReport(reportId);
+                    });
+                });
+                
+                document.querySelectorAll('.download-report').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const reportId = this.getAttribute('data-id');
+                        downloadReport(reportId);
+                    });
+                });
+            } else {
+                // No reports found
+                reportsList.innerHTML = `
+                    <div class="alert alert-info">
+                        <p>No ${category === 'all' ? '' : category.toLowerCase()} reports found. Generate a new report to get started.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Category filter buttons
+            document.querySelectorAll('[data-category]').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('[data-category]').forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Load reports for selected category
+                    const category = this.getAttribute('data-category');
+                    loadReports(category);
+                });
+            });
+            
+            // Generate report button
+            document.getElementById('generateReportBtn').addEventListener('click', showGenerateReportModal);
+            
+            // Report type change event
+            document.getElementById('reportType').addEventListener('change', function() {
+                // Hide all parameter sections
+                document.querySelectorAll('.report-params').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Show the relevant parameter section based on report type
+                const reportType = this.value;
+                if (reportType === 'Sales') {
+                    document.getElementById('salesReportParams').style.display = 'block';
+                } else if (reportType === 'Inventory') {
+                    document.getElementById('inventoryReportParams').style.display = 'block';
+                } else if (reportType === 'Customer') {
+                    document.getElementById('customerReportParams').style.display = 'block';
+                }
+            });
+            
+            // Save report button
+            document.getElementById('saveReportBtn').addEventListener('click', generateReport);
+            
+            // Cancel and close buttons for modals
+            document.getElementById('cancelReportBtn').addEventListener('click', closeGenerateReportModal);
+            document.getElementById('closeGenerateReportModal').addEventListener('click', closeGenerateReportModal);
+            document.getElementById('closeReportPreviewModal').addEventListener('click', closeReportPreviewModal);
+            document.getElementById('closePreviewBtn').addEventListener('click', closeReportPreviewModal);
+            
+            // Download report button in preview modal
+            document.getElementById('downloadReportBtn').addEventListener('click', function() {
+                showAlert('Report downloaded successfully!', 'success');
+                closeReportPreviewModal();
+            });
+            
+            // Mobile navigation toggle
+            document.getElementById('navToggle').addEventListener('click', function() {
+                document.getElementById('mainNav').classList.toggle('active');
+            });
+        }
+
+        // Show generate report modal
+        function showGenerateReportModal() {
+            document.getElementById('reportForm').reset();
+            document.querySelectorAll('.report-params').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.getElementById('generateReportModal').classList.add('active');
+        }
+
+        // Generate a new report
+        function generateReport() {
+            const form = document.getElementById('reportForm');
+            
+            // Basic form validation
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const reportName = document.getElementById('reportName').value;
+            const reportType = document.getElementById('reportType').value;
+            const fileFormat = document.getElementById('fileFormat').value;
+            const notes = document.getElementById('reportNotes').value;
+            
+            // Collect parameters based on report type
+            let parameters = {};
+            
+            if (reportType === 'Sales') {
+                parameters.startDate = document.getElementById('salesStartDate').value;
+                parameters.endDate = document.getElementById('salesEndDate').value;
+            } else if (reportType === 'Inventory') {
+                parameters.category = document.getElementById('inventoryCategory').value;
+                parameters.showLowStock = document.getElementById('showLowStock').checked;
+            } else if (reportType === 'Customer') {
+                parameters.customerType = document.getElementById('customerType').value;
+                parameters.purchaseMinimum = document.getElementById('purchaseMinimum').value;
+            }
+            
+            // Create report data
+            const reportData = {
+                userId: 1, // Assuming admin user with ID 1
+                reportName,
+                reportType,
+                parameters: JSON.stringify(parameters),
+                fileFormat,
+                filePath: `/reports/${reportType.toLowerCase()}_${new Date().toISOString().split('T')[0]}.${fileFormat.toLowerCase()}`,
+                generatedAt: new Date().toISOString(),
+                notes
+            };
+            
+            // Add report to database
+            const report = DB.generateReport(reportData);
+            
+            if (report) {
+                showAlert('Report generated successfully!', 'success');
+                closeGenerateReportModal();
+                loadReports('all');
+                
+                // Show the report preview
+                viewReport(report.id);
+            } else {
+                showAlert('Error generating report!', 'danger');
+            }
+        }
+
+        // View report
+        function viewReport(reportId) {
+            const report = DB.getById('reports', reportId);
+            
+            if (report) {
+                // Set report title and date
+                document.getElementById('reportPreviewTitle').textContent = 'Report Preview';
+                document.getElementById('previewReportName').textContent = report.reportName;
+                
+                // Format date
+                const reportDate = new Date(report.generatedAt);
+                document.getElementById('previewReportDate').textContent = `Generated on ${reportDate.toLocaleDateString()} at ${reportDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}`;
+                
+                // Generate report content based on report type
+                const reportContent = document.getElementById('reportContent');
+                
+                // Parse parameters
+                const parameters = JSON.parse(report.parameters || '{}');
+                
+                // Generate different report content based on report type
+                if (report.reportType === 'Sales') {
+                    generateSalesReportContent(reportContent, parameters);
+                } else if (report.reportType === 'Inventory') {
+                    generateInventoryReportContent(reportContent, parameters);
+                } else if (report.reportType === 'Customer') {
+                    generateCustomerReportContent(reportContent, parameters);
+                } else if (report.reportType === 'Supplier') {
+                    generateSupplierReportContent(reportContent);
+                } else if (report.reportType === 'Financial') {
+                    generateFinancialReportContent(reportContent);
+                } else {
+                    // Generic report content
+                    reportContent.innerHTML = `
+                        <div class="alert alert-info">
+                            <p>This is a preview of the ${report.reportName}.</p>
+                            <p>Download the report to view the full content.</p>
+                        </div>
+                    `;
+                }
+                
+                // Show the modal
+                document.getElementById('reportPreviewModal').classList.add('active');
+            }
+        }
+
+        // Generate sales report content
+        function generateSalesReportContent(container, parameters) {
+            const orders = DB.getOrdersWithCustomerInfo();
+            
+            // Filter orders by date if parameters are provided
+            let filteredOrders = orders;
+            if (parameters.startDate && parameters.endDate) {
+                const startDate = new Date(parameters.startDate);
+                const endDate = new Date(parameters.endDate);
+                endDate.setHours(23, 59, 59); // Set to end of day
+                
+                filteredOrders = orders.filter(order => {
+                    const orderDate = new Date(order.orderDate);
+                    return orderDate >= startDate && orderDate <= endDate;
+                });
+            }
+            
+            // Sort orders by date (newest first)
+            filteredOrders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+            
+            // Calculate total sales
+            const totalSales = filteredOrders.reduce((sum, order) => sum + order.totalAmount, 0);
+            
+            // Group orders by status
+            const ordersByStatus = {};
+            filteredOrders.forEach(order => {
+                if (!ordersByStatus[order.status]) {
+                    ordersByStatus[order.status] = [];
+                }
+                ordersByStatus[order.status].push(order);
+            });
+            
+            // Create report content
+            let content = `
+                <div class="report-summary mb-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title">Sales Summary</h3>
+                        </div>
+                        <div class="card-value">$${totalSales.toFixed(2)}</div>
+                        <div class="card-label">Total Sales</div>
+                    </div>
+                </div>
+                
+                <h3 class="mb-2">Orders by Status</h3>
+                <div class="table-container mb-3">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Count</th>
+                                <th>Total Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // Add rows for each status
+            for (const status in ordersByStatus) {
+                const statusOrders = ordersByStatus[status];
+                const statusTotal = statusOrders.reduce((sum, order) => sum + order.totalAmount, 0);
+                
+                content += `
+                    <tr>
+                        <td>${status}</td>
+                        <td>${statusOrders.length}</td>
+                        <td>$${statusTotal.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+            
+            content += `
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3 class="mb-2">Recent Orders</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // Add rows for recent orders (limit to 10)
+            const recentOrders = filteredOrders.slice(0, 10);
+            
+            if (recentOrders.length > 0) {
+                recentOrders.forEach(order => {
+                    // Format date
+                    const orderDate = new Date(order.orderDate);
+                    const formattedDate = orderDate.toLocaleDateString();
+                    
+                    content += `
+                        <tr>
+                            <td>#${order.id}</td>
+                            <td>${order.customerName}</td>
+                            <td>${formattedDate}</td>
+                            <td>$${order.totalAmount.toFixed(2)}</td>
+                            <td>${order.status}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                content += `
+                    <tr>
+                        <td colspan="5" class="text-center">No orders found for the selected period</td>
+                    </tr>
+                `;
+            }
+            
+            content += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            container.innerHTML = content;
+        }
+
+        // Generate inventory report content
+        function generateInventoryReportContent(container, parameters) {
+            const products = DB.getProductsWithSupplierInfo();
+            
+            // Filter products by category if specified
+            let filteredProducts = products;
+            if (parameters.category) {
+                filteredProducts = products.filter(product => product.category === parameters.category);
+            }
+            
+            // Filter by low stock if specified
+            if (parameters.showLowStock) {
+                filteredProducts = filteredProducts.filter(product => product.stockQuantity <= product.reorderLevel);
+            }
+            
+            // Calculate inventory value
+            const totalInventoryValue = filteredProducts.reduce((sum, product) => sum + (product.costPrice * product.stockQuantity), 0);
+            const totalRetailValue = filteredProducts.reduce((sum, product) => sum + (product.sellingPrice * product.stockQuantity), 0);
+            
+            // Group products by category
+            const productsByCategory = {};
+            filteredProducts.forEach(product => {
+                const category = product.category || 'Uncategorized';
+                if (!productsByCategory[category]) {
+                    productsByCategory[category] = [];
+                }
+                productsByCategory[category].push(product);
+            });
+            
+            // Create report content
+            let content = `
+                <div class="report-summary mb-3">
+                    <div class="d-flex gap-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Total Products</h3>
+                            </div>
+                            <div class="card-value">${filteredProducts.length}</div>
+                            <div class="card-label">Products in inventory</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Inventory Value</h3>
+                            </div>
+                            <div class="card-value">$${totalInventoryValue.toFixed(2)}</div>
+                            <div class="card-label">Total cost value</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Retail Value</h3>
+                            </div>
+                            <div class="card-value">$${totalRetailValue.toFixed(2)}</div>
+                            <div class="card-label">Total selling value</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="mb-2">Inventory by Category</h3>
+                <div class="table-container mb-3">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Category</th>
+                                <th>Products</th>
+                                <th>Total Stock</th>
+                                <th>Inventory Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // Add rows for each category
+            for (const category in productsByCategory) {
+                const categoryProducts = productsByCategory[category];
+                const totalStock = categoryProducts.reduce((sum, product) => sum + product.stockQuantity, 0);
+                const categoryValue = categoryProducts.reduce((sum, product) => sum + (product.costPrice * product.stockQuantity), 0);
+                
+                content += `
+                    <tr>
+                        <td>${category}</td>
+                        <td>${categoryProducts.length}</td>
+                        <td>${totalStock}</td>
+                        <td>$${categoryValue.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+            
+            content += `
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3 class="mb-2">Product Inventory</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Product Name</th>
+                                <th>SKU</th>
+                                <th>Supplier</th>
+                                <th>Stock</th>
+                                <th>Reorder Level</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // Add rows for products
+            if (filteredProducts.length > 0) {
+                filteredProducts.forEach(product => {
+                    content += `
+                        <tr>
+                            <td>${product.productName}</td>
+                            <td>${product.sku}</td>
+                            <td>${product.supplierName}</td>
+                            <td>${product.stockQuantity}</td>
+                            <td>${product.reorderLevel}</td>
+                            <td>${product.status}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                content += `
+                    <tr>
+                        <td colspan="6" class="text-center">No products found matching the criteria</td>
+                    </tr>
+                `;
+            }
+            
+            content += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            container.innerHTML = content;
+        }
+
+        // Generate customer report content
+        function generateCustomerReportContent(container, parameters) {
+            const customers = DB.getAll('customers');
+            const orders = DB.getAll('orders');
+            
+            // Filter customers by type if specified
+            let filteredCustomers = customers;
+            if (parameters.customerType) {
+                filteredCustomers = customers.filter(customer => customer.customerType === parameters.customerType);
+            }
+            
+            // Calculate customer metrics
+            let customerMetrics = filteredCustomers.map(customer => {
+                const customerOrders = orders.filter(order => order.customerId === customer.id);
+                const totalSpent = customerOrders.reduce((sum, order) => sum + order.totalAmount, 0);
+                const orderCount = customerOrders.length;
+                
+                return {
+                    ...customer,
+                    totalSpent,
+                    orderCount,
+                    averageOrderValue: orderCount > 0 ? totalSpent / orderCount : 0
+                };
+            });
+            
+            // Filter by minimum purchase amount if specified
+            if (parameters.purchaseMinimum && parameters.purchaseMinimum > 0) {
+                customerMetrics = customerMetrics.filter(customer => customer.totalSpent >= parseFloat(parameters.purchaseMinimum));
+            }
+            
+            // Sort customers by total spent (highest first)
+            customerMetrics.sort((a, b) => b.totalSpent - a.totalSpent);
+            
+            // Calculate totals
+            const totalCustomers = customerMetrics.length;
+            const totalRevenue = customerMetrics.reduce((sum, customer) => sum + customer.totalSpent, 0);
+            const totalOrders = customerMetrics.reduce((sum, customer) => sum + customer.orderCount, 0);
+            
+            // Create report content
+            let content = `
+                <div class="report-summary mb-3">
+                    <div class="d-flex gap-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Total Customers</h3>
+                            </div>
+                            <div class="card-value">${totalCustomers}</div>
+                            <div class="card-label">Active customers</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Total Revenue</h3>
+                            </div>
+                            <div class="card-value">$${totalRevenue.toFixed(2)}</div>
+                            <div class="card-label">From all customers</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Total Orders</h3>
+                            </div>
+                            <div class="card-value">${totalOrders}</div>
+                            <div class="card-label">From all customers</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="mb-2">Customer Breakdown by Type</h3>
+                <div class="table-container mb-3">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer Type</th>
+                                <th>Count</th>
+                                <th>Total Revenue</th>
+                                <th>Average Spend</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // Group customers by type
+            const customerTypes = {};
+            customerMetrics.forEach(customer => {
+                const type = customer.customerType;
+                if (!customerTypes[type]) {
+                    customerTypes[type] = {
+                        count: 0,
+                        revenue: 0
+                    };
+                }
+                customerTypes[type].count++;
+                customerTypes[type].revenue += customer.totalSpent;
+            });
+            
+            // Add rows for each customer type
+            for (const type in customerTypes) {
+                const typeData = customerTypes[type];
+                const averageSpend = typeData.count > 0 ? typeData.revenue / typeData.count : 0;
+                
+                content += `
+                    <tr>
+                        <td>${type}</td>
+                        <td>${typeData.count}</td>
+                        <td>$${typeData.revenue.toFixed(2)}</td>
+                        <td>$${averageSpend.toFixed(2)}</td>
+                    </tr>
+                `;
+            }
+            
+            content += `
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3 class="mb-2">Top Customers</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Type</th>
+                                <th>Orders</th>
+                                <th>Total Spent</th>
+                                <th>Average Order</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // Add rows for top customers (limit to 10)
+            const topCustomers = customerMetrics.slice(0, 10);
+            
+            if (topCustomers.length > 0) {
+                topCustomers.forEach(customer => {
+                    content += `
+                        <tr>
+                            <td>${customer.firstName} ${customer.lastName}</td>
+                            <td>${customer.customerType}</td>
+                            <td>${customer.orderCount}</td>
+                            <td>$${customer.totalSpent.toFixed(2)}</td>
+                            <td>$${customer.averageOrderValue.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                content += `
+                    <tr>
+                        <td colspan="5" class="text-center">No customers found matching the criteria</td>
+                    </tr>
+                `;
+            }
+            
+            content += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            container.innerHTML = content;
+        }
+
+        // Generate supplier report content
+        function generateSupplierReportContent(container) {
+            const suppliers = DB.getAll('suppliers');
+            const products = DB.getAll('products');
+            
+            // Calculate supplier metrics
+            const supplierMetrics = suppliers.map(supplier => {
+                const supplierProducts = products.filter(product => product.supplierId === supplier.id);
+                const productCount = supplierProducts.length;
+                const inventoryValue = supplierProducts.reduce((sum, product) => sum + (product.costPrice * product.stockQuantity), 0);
+                const lowStockCount = supplierProducts.filter(product => product.stockQuantity <= product.reorderLevel).length;
+                
+                return {
+                    ...supplier,
+                    productCount,
+                    inventoryValue,
+                    lowStockCount
+                };
+            });
+            
+            // Sort suppliers by inventory value (highest first)
+            supplierMetrics.sort((a, b) => b.inventoryValue - a.inventoryValue);
+            
+            // Calculate totals
+            const totalSuppliers = supplierMetrics.length;
+            const totalProducts = supplierMetrics.reduce((sum, supplier) => sum + supplier.productCount, 0);
+            const totalInventoryValue = supplierMetrics.reduce((sum, supplier) => sum + supplier.inventoryValue, 0);
+            
+            // Create report content
+            let content = `
+                <div class="report-summary mb-3">
+                    <div class="d-flex gap-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Total Suppliers</h3>
+                            </div>
+                            <div class="card-value">${totalSuppliers}</div>
+                            <div class="card-label">Active suppliers</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Total Products</h3>
+                            </div>
+                            <div class="card-value">${totalProducts}</div>
+                            <div class="card-label">From all suppliers</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Inventory Value</h3>
+                            </div>
+                            <div class="card-value">$${totalInventoryValue.toFixed(2)}</div>
+                            <div class="card-label">Total cost value</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="mb-2">Supplier Overview</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Supplier</th>
+                                <th>Products</th>
+                                <th>Inventory Value</th>
+                                <th>Low Stock Items</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // Add rows for suppliers
+            if (supplierMetrics.length > 0) {
+                supplierMetrics.forEach(supplier => {
+                    content += `
+                        <tr>
+                            <td>${supplier.companyName}</td>
+                            <td>${supplier.productCount}</td>
+                            <td>$${supplier.inventoryValue.toFixed(2)}</td>
+                            <td>${supplier.lowStockCount}</td>
+                            <td>${supplier.status}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                content += `
+                    <tr>
+                        <td colspan="5" class="text-center">No suppliers found</td>
+                    </tr>
+                `;
+            }
+            
+            content += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            container.innerHTML = content;
+        }
+
+        // Generate financial report content
+        function generateFinancialReportContent(container) {
+            const orders = DB.getAll('orders');
+            const payments = DB.getAll('payments');
+            const products = DB.getAll('products');
+            const orderDetails = DB.getAll('orderDetails');
+            
+            // Calculate revenue, cost, and profit
+            let totalRevenue = 0;
+            let totalCost = 0;
+            
+            orderDetails.forEach(detail => {
+                const product = products.find(p => p.id === detail.productId);
+                if (product) {
+                    totalRevenue += detail.subtotal;
+                    totalCost += product.costPrice * detail.quantity;
+                }
+            });
+            
+            const totalProfit = totalRevenue - totalCost;
+            const profitMargin = totalRevenue > 0 ? (totalProfit / totalRevenue) * 100 : 0;
+            
+            // Calculate payment statistics
+            const completedPayments = payments.filter(payment => payment.status === 'Completed');
+            const totalReceived = completedPayments.reduce((sum, payment) => sum + payment.amount, 0);
+            const pendingPayments = payments.filter(payment => payment.status === 'Pending');
+            const totalPending = pendingPayments.reduce((sum, payment) => sum + payment.amount, 0);
+            
+            // Group orders by month for trend analysis
+            const monthlyData = {};
+            
+            orders.forEach(order => {
+                const date = new Date(order.orderDate);
+                const monthYear = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
+                
+                if (!monthlyData[monthYear]) {
+                    monthlyData[monthYear] = {
+                        revenue: 0,
+                        orders: 0
+                    };
+                }
+                
+                monthlyData[monthYear].revenue += order.totalAmount;
+                monthlyData[monthYear].orders++;
+            });
+            
+            // Sort months chronologically
+            const sortedMonths = Object.keys(monthlyData).sort();
+            
+            // Create report content
+            let content = `
+                <div class="report-summary mb-3">
+                    <div class="d-flex gap-3">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Total Revenue</h3>
+                            </div>
+                            <div class="card-value">$${totalRevenue.toFixed(2)}</div>
+                            <div class="card-label">Gross revenue</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Total Profit</h3>
+                            </div>
+                            <div class="card-value">$${totalProfit.toFixed(2)}</div>
+                            <div class="card-label">Net profit</div>
+                        </div>
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Profit Margin</h3>
+                            </div>
+                            <div class="card-value">${profitMargin.toFixed(2)}%</div>
+                            <div class="card-label">Overall margin</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h3 class="mb-2">Payment Status</h3>
+                <div class="table-container mb-3">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Amount</th>
+                                <th>Percentage</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Received</td>
+                                <td>$${totalReceived.toFixed(2)}</td>
+                                <td>${totalRevenue > 0 ? ((totalReceived / totalRevenue) * 100).toFixed(2) : 0}%</td>
+                            </tr>
+                            <tr>
+                                <td>Pending</td>
+                                <td>$${totalPending.toFixed(2)}</td>
+                                <td>${totalRevenue > 0 ? ((totalPending / totalRevenue) * 100).toFixed(2) : 0}%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <h3 class="mb-2">Monthly Revenue Trend</h3>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Orders</th>
+                                <th>Revenue</th>
+                                <th>Average Order Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            // Add rows for monthly data
+            if (sortedMonths.length > 0) {
+                sortedMonths.forEach(month => {
+                    const data = monthlyData[month];
+                    const [year, monthNum] = month.split('-');
+                    const monthName = new Date(year, parseInt(monthNum) - 1, 1).toLocaleString('default', { month: 'long' });
+                    const formattedMonth = `${monthName} ${year}`;
+                    const averageOrderValue = data.orders > 0 ? data.revenue / data.orders : 0;
+                    
+                    content += `
+                        <tr>
+                            <td>${formattedMonth}</td>
+                            <td>${data.orders}</td>
+                            <td>$${data.revenue.toFixed(2)}</td>
+                            <td>$${averageOrderValue.toFixed(2)}</td>
+                        </tr>
+                    `;
+                });
+            } else {
+                content += `
+                    <tr>
+                        <td colspan="4" class="text-center">No order data available</td>
+                    </tr>
+                `;
+            }
+            
+            content += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            
+            container.innerHTML = content;
+        }
+
+        // Download report
+        function downloadReport(reportId) {
+            const report = DB.getById('reports', reportId);
+            
+            if (report) {
+                // In a real application, this would trigger a file download
+                // For this simulation, we'll just show a success message
+                showAlert(`Report "${report.reportName}" downloaded as ${report.fileFormat} file.`, 'success');
+                
+                // Create a notification for the download
+                const notification = {
+                    userId: 1, // Assuming admin user with ID 1
+                    title: 'Report Downloaded',
+                    message: `Report "${report.reportName}" has been downloaded`,
+                    type: 'Info',
+                    relatedTo: 'Report',
+                    relatedId: report.id,
+                    isRead: false,
+                    createdAt: new Date().toISOString()
+                };
+                
+                // Add notification to database
+                DB.add('notifications', notification);
+            } else {
+                showAlert('Error: Report not found', 'danger');
+            }
+        }
+
+        // Close generate report modal
+        function closeGenerateReportModal() {
+            document.getElementById('generateReportModal').classList.remove('active');
+        }
+
+        // Close report preview modal
+        function closeReportPreviewModal() {
+            document.getElementById('reportPreviewModal').classList.remove('active');
+            // Clear the report content to prevent memory leaks
+            document.getElementById('reportContent').innerHTML = '';
+        }
+
+        // Show alert message
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            const container = document.querySelector('.container');
+            container.insertBefore(alertDiv, document.querySelector('h1').nextElementSibling);
+            
+            // Remove the alert after 3 seconds
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

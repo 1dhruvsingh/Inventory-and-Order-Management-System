@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Smart Inventory and Order Management System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Initialize database on page load -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize the database with sample data
+            DB.init();
+        });
+    </script>
+
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <a href="index.html">Smart Inventory</a>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+                    <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+                    <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+                    <li><a href="suppliers.html"><i class="fas fa-truck"></i> Suppliers</a></li>
+                    <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <h1 class="mb-3">Dashboard</h1>
+            
+            <!-- Dashboard Cards -->
+            <div class="dashboard-cards">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Total Products</h2>
+                        <div class="card-icon"><i class="fas fa-box"></i></div>
+                    </div>
+                    <div class="card-value" id="totalProducts">0</div>
+                    <div class="card-label">Products in inventory</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Total Orders</h2>
+                        <div class="card-icon"><i class="fas fa-shopping-cart"></i></div>
+                    </div>
+                    <div class="card-value" id="totalOrders">0</div>
+                    <div class="card-label">Orders processed</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Total Customers</h2>
+                        <div class="card-icon"><i class="fas fa-users"></i></div>
+                    </div>
+                    <div class="card-value" id="totalCustomers">0</div>
+                    <div class="card-label">Registered customers</div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">Low Stock</h2>
+                        <div class="card-icon"><i class="fas fa-exclamation-triangle"></i></div>
+                    </div>
+                    <div class="card-value" id="lowStockCount">0</div>
+                    <div class="card-label">Products below reorder level</div>
+                </div>
+            </div>
+            
+            <!-- Recent Orders Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2 class="table-title">Recent Orders</h2>
+                    <div class="table-actions">
+                        <a href="orders.html" class="btn btn-primary btn-sm">View All</a>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            <th>Date</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Payment</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentOrdersTable">
+                        <!-- Orders will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Low Stock Products Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2 class="table-title">Low Stock Products</h2>
+                    <div class="table-actions">
+                        <a href="products.html" class="btn btn-primary btn-sm">View All Products</a>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>SKU</th>
+                            <th>Category</th>
+                            <th>Current Stock</th>
+                            <th>Reorder Level</th>
+                            <th>Supplier</th>
+                        </tr>
+                    </thead>
+                    <tbody id="lowStockTable">
+                        <!-- Low stock products will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Smart Inventory and Order Management System -Dhruv Singh</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script>
+        // Populate dashboard data
+        document.addEventListener('DOMContentLoaded', function() {
+            // Update dashboard cards
+            const products = DB.getAll('products');
+            const orders = DB.getAll('orders');
+            const customers = DB.getAll('customers');
+            const lowStockProducts = DB.getLowStockProducts();
+            
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('totalCustomers').textContent = customers.length;
+            document.getElementById('lowStockCount').textContent = lowStockProducts.length;
+            
+            // Populate recent orders table
+            const recentOrdersTable = document.getElementById('recentOrdersTable');
+            const ordersWithCustomerInfo = DB.getOrdersWithCustomerInfo();
+            
+            // Sort orders by date (newest first) and take the first 5
+            const recentOrders = ordersWithCustomerInfo
+                .sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate))
+                .slice(0, 5);
+            
+            recentOrders.forEach(order => {
+                const row = document.createElement('tr');
+                
+                // Format date
+                const orderDate = new Date(order.orderDate);
+                const formattedDate = orderDate.toLocaleDateString() + ' ' + orderDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                
+                // Create status badge class based on order status
+                let statusBadgeClass = '';
+                switch(order.status) {
+                    case 'Delivered': statusBadgeClass = 'badge-success'; break;
+                    case 'Processing': statusBadgeClass = 'badge-info'; break;
+                    case 'Pending': statusBadgeClass = 'badge-warning'; break;
+                    case 'Cancelled': statusBadgeClass = 'badge-danger'; break;
+                    default: statusBadgeClass = 'badge-info';
+                }
+                
+                // Create payment badge class based on payment status
+                let paymentBadgeClass = '';
+                switch(order.paymentStatus) {
+                    case 'Paid': paymentBadgeClass = 'badge-success'; break;
+                    case 'Partial': paymentBadgeClass = 'badge-warning'; break;
+                    case 'Unpaid': paymentBadgeClass = 'badge-danger'; break;
+                    default: paymentBadgeClass = 'badge-info';
+                }
+                
+                row.innerHTML = `
+                    <td>#${order.id}</td>
+                    <td>${order.customerName}</td>
+                    <td>${formattedDate}</td>
+                    <td>$${order.totalAmount.toFixed(2)}</td>
+                    <td><span class="badge ${statusBadgeClass}">${order.status}</span></td>
+                    <td><span class="badge ${paymentBadgeClass}">${order.paymentStatus}</span></td>
+                `;
+                
+                recentOrdersTable.appendChild(row);
+            });
+            
+            // Populate low stock products table
+            const lowStockTable = document.getElementById('lowStockTable');
+            const productsWithSupplierInfo = DB.getProductsWithSupplierInfo();
+            
+            // Filter low stock products and add supplier info
+            const lowStockWithSupplier = productsWithSupplierInfo.filter(product => 
+                product.stockQuantity <= product.reorderLevel
+            );
+            
+            lowStockWithSupplier.forEach(product => {
+                const row = document.createElement('tr');
+                
+                row.innerHTML = `
+                    <td>${product.productName}</td>
+                    <td>${product.sku}</td>
+                    <td>${product.category}</td>
+                    <td>${product.stockQuantity}</td>
+                    <td>${product.reorderLevel}</td>
+                    <td>${product.supplierName}</td>
+                `;
+                
+                lowStockTable.appendChild(row);
+            });
+        });
+        
+        // Mobile navigation toggle
+        document.getElementById('navToggle').addEventListener('click', function() {
+            document.getElementById('mainNav').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

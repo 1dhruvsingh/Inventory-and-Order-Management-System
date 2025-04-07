@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suppliers - Smart Inventory and Order Management System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <a href="index.html">Smart Inventory</a>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+                    <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+                    <li><a href="customers.html"><i class="fas fa-users"></i> Customers</a></li>
+                    <li><a href="suppliers.html" class="active"><i class="fas fa-truck"></i> Suppliers</a></li>
+                    <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="d-flex justify-between align-center mb-3">
+                <h1>Suppliers</h1>
+                <button class="btn btn-primary" id="addSupplierBtn">
+                    <i class="fas fa-plus"></i> Add New Supplier
+                </button>
+            </div>
+            
+            <!-- Suppliers Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2 class="table-title">Supplier Directory</h2>
+                    <div class="table-actions">
+                        <div class="form-group mb-0">
+                            <input type="text" id="supplierSearch" placeholder="Search suppliers..." class="search-input">
+                        </div>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Company Name</th>
+                            <th>Contact Person</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="suppliersTable">
+                        <!-- Suppliers will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Supplier Modal -->
+    <div class="modal-overlay" id="supplierModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="supplierModalTitle">Add New Supplier</h2>
+                <button class="modal-close" id="closeSupplierModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="supplierForm">
+                    <input type="hidden" id="supplierId">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="companyName">Company Name</label>
+                                <input type="text" id="companyName" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="contactName">Contact Person</label>
+                                <input type="text" id="contactName">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="text" id="phone" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <input type="text" id="state">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="postalCode">Postal Code</label>
+                                <input type="text" id="postalCode">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="country">Country</label>
+                                <input type="text" id="country">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="status">Status</label>
+                        <select id="status" required>
+                            <option value="Active">Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="cancelSupplierBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveSupplierBtn">Save Supplier</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Confirm Delete</h2>
+                <button class="modal-close" id="closeDeleteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this supplier? This action cannot be undone.</p>
+                <input type="hidden" id="deleteSupplierId">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="cancelDeleteBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Supplier Details Modal -->
+    <div class="modal-overlay" id="supplierDetailsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Supplier Details</h2>
+                <button class="modal-close" id="closeSupplierDetailsModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="supplier-info mb-3">
+                    <h3 class="mb-2" id="supplierNameDisplay"></h3>
+                    <div class="d-flex gap-3 mb-2">
+                        <div>
+                            <h4 class="mb-1">Contact Information</h4>
+                            <p id="contactNameDisplay"></p>
+                            <p id="supplierEmailDisplay"></p>
+                            <p id="supplierPhoneDisplay"></p>
+                        </div>
+                        <div>
+                            <h4 class="mb-1">Address</h4>
+                            <p id="supplierAddressDisplay"></p>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <h4 class="mb-1">Status</h4>
+                        <p><span class="badge" id="supplierStatusBadge"></span></p>
+                    </div>
+                </div>
+                
+                <h3 class="mb-2">Supplied Products</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product Name</th>
+                            <th>SKU</th>
+                            <th>Category</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="supplierProductsTable">
+                        <!-- Supplier products will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeDetailsBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Smart Inventory and Order Management System</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script>
+        // Initialize database on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            DB.init();
+            loadSuppliers();
+            setupEventListeners();
+        });
+
+        // Load all suppliers into the table
+        function loadSuppliers() {
+            const suppliersTable = document.getElementById('suppliersTable');
+            suppliersTable.innerHTML = ''; // Clear existing rows
+            
+            const suppliers = DB.getAll('suppliers');
+            
+            suppliers.forEach(supplier => {
+                const row = document.createElement('tr');
+                
+                // Create supplier status badge class
+                let statusBadgeClass = supplier.status === 'Active' ? 'badge-success' : 'badge-danger';
+                
+                row.innerHTML = `
+                    <td>${supplier.id}</td>
+                    <td>${supplier.companyName}</td>
+                    <td>${supplier.contactName || '-'}</td>
+                    <td>${supplier.email || '-'}</td>
+                    <td>${supplier.phone}</td>
+                    <td>${supplier.city || ''}, ${supplier.country || ''}</td>
+                    <td><span class="badge ${statusBadgeClass}">${supplier.status}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-info view-supplier" data-id="${supplier.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-primary edit-supplier" data-id="${supplier.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger delete-supplier" data-id="${supplier.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                suppliersTable.appendChild(row);
+            });
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.view-supplier').forEach(button => {
+                button.addEventListener('click', function() {
+                    const supplierId = this.getAttribute('data-id');
+                    viewSupplierDetails(supplierId);
+                });
+            });
+            
+            document.querySelectorAll('.edit-supplier').forEach(button => {
+                button.addEventListener('click', function() {
+                    const supplierId = this.getAttribute('data-id');
+                    editSupplier(supplierId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-supplier').forEach(button => {
+                button.addEventListener('click', function() {
+                    const supplierId = this.getAttribute('data-id');
+                    showDeleteModal(supplierId);
+                });
+            });
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Add supplier button
+            document.getElementById('addSupplierBtn').addEventListener('click', showAddSupplierModal);
+            
+            // Save supplier button
+            document.getElementById('saveSupplierBtn').addEventListener('click', saveSupplier);
+            
+            // Cancel buttons and close buttons for modals
+            document.getElementById('cancelSupplierBtn').addEventListener('click', closeSupplierModal);
+            document.getElementById('closeSupplierModal').addEventListener('click', closeSupplierModal);
+            document.getElementById('cancelDeleteBtn').addEventListener('click', closeDeleteModal);
+            document.getElementById('closeDeleteModal').addEventListener('click', closeDeleteModal);
+            document.getElementById('closeSupplierDetailsModal').addEventListener('click', closeSupplierDetailsModal);
+            document.getElementById('closeDetailsBtn').addEventListener('click', closeSupplierDetailsModal);
+            
+            // Confirm delete button
+            document.getElementById('confirmDeleteBtn').addEventListener('click', deleteSupplier);
+            
+            // Search functionality
+            document.getElementById('supplierSearch').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const rows = document.querySelectorAll('#suppliersTable tr');
+                
+                rows.forEach(row => {
+                    const companyName = row.cells[1].textContent.toLowerCase();
+                    const contactName = row.cells[2].textContent.toLowerCase();
+                    const email = row.cells[3].textContent.toLowerCase();
+                    const phone = row.cells[4].textContent.toLowerCase();
+                    
+                    if (companyName.includes(searchTerm) || contactName.includes(searchTerm) || 
+                        email.includes(searchTerm) || phone.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Mobile navigation toggle
+            document.getElementById('navToggle').addEventListener('click', function() {
+                document.getElementById('mainNav').classList.toggle('active');
+            });
+        }
+
+        // Show modal to add a new supplier
+        function showAddSupplierModal() {
+            document.getElementById('supplierModalTitle').textContent = 'Add New Supplier';
+            document.getElementById('supplierForm').reset();
+            document.getElementById('supplierId').value = '';
+            document.getElementById('supplierModal').classList.add('active');
+        }
+
+        // Show modal to edit an existing supplier
+        function editSupplier(supplierId) {
+            const supplier = DB.getById('suppliers', supplierId);
+            
+            if (supplier) {
+                document.getElementById('supplierModalTitle').textContent = 'Edit Supplier';
+                
+                // Fill the form with supplier data
+                document.getElementById('supplierId').value = supplier.id;
+                document.getElementById('companyName').value = supplier.companyName;
+                document.getElementById('contactName').value = supplier.contactName || '';
+                document.getElementById('email').value = supplier.email || '';
+                document.getElementById('phone').value = supplier.phone;
+                document.getElementById('address').value = supplier.address || '';
+                document.getElementById('city').value = supplier.city || '';
+                document.getElementById('state').value = supplier.state || '';
+                document.getElementById('postalCode').value = supplier.postalCode || '';
+                document.getElementById('country').value = supplier.country || '';
+                document.getElementById('status').value = supplier.status;
+                
+                document.getElementById('supplierModal').classList.add('active');
+            }
+        }
+
+        // View supplier details
+        function viewSupplierDetails(supplierId) {
+            const supplier = DB.getById('suppliers', supplierId);
+            const products = DB.getAll('products').filter(product => product.supplierId === parseInt(supplierId));
+            
+            if (supplier) {
+                // Set supplier information
+                document.getElementById('supplierNameDisplay').textContent = supplier.companyName;
+                document.getElementById('contactNameDisplay').textContent = supplier.contactName ? `Contact: ${supplier.contactName}` : '';
+                document.getElementById('supplierEmailDisplay').textContent = supplier.email ? `Email: ${supplier.email}` : '';
+                document.getElementById('supplierPhoneDisplay').textContent = `Phone: ${supplier.phone}`;
+                
+                // Set address
+                let addressText = '';
+                if (supplier.address) addressText += `${supplier.address}<br>`;
+                if (supplier.city || supplier.state) {
+                    addressText += `${supplier.city || ''}, ${supplier.state || ''} ${supplier.postalCode || ''}<br>`;
+                }
+                if (supplier.country) addressText += supplier.country;
+                
+                document.getElementById('supplierAddressDisplay').innerHTML = addressText || 'No address provided';
+                
+                // Set supplier status badge
+                const supplierStatusBadge = document.getElementById('supplierStatusBadge');
+                supplierStatusBadge.textContent = supplier.status;
+                supplierStatusBadge.className = 'badge';
+                supplierStatusBadge.classList.add(supplier.status === 'Active' ? 'badge-success' : 'badge-danger');
+                
+                // Set supplied products
+                const supplierProductsTable = document.getElementById('supplierProductsTable');
+                supplierProductsTable.innerHTML = '';
+                
+                if (products.length > 0) {
+                    products.forEach(product => {
+                        const row = document.createElement('tr');
+                        
+                        // Create status badge class based on product status
+                        let statusBadgeClass = '';
+                        switch(product.status) {
+                            case 'Available': statusBadgeClass = 'badge-success'; break;
+                            case 'Low Stock': statusBadgeClass = 'badge-warning'; break;
+                            case 'Out of Stock': statusBadgeClass = 'badge-danger'; break;
+                            case 'Discontinued': statusBadgeClass = 'badge-info'; break;
+                            default: statusBadgeClass = 'badge-info';
+                        }
+                        
+                        row.innerHTML = `
+                            <td>${product.productName}</td>
+                            <td>${product.sku}</td>
+                            <td>${product.category || '-'}</td>
+                            <td>${product.stockQuantity}</td>
+                            <td><span class="badge ${statusBadgeClass}">${product.status}</span></td>
+                        `;
+                        
+                        supplierProductsTable.appendChild(row);
+                    });
+                } else {
+                    const row = document.createElement('tr');
+                    row.innerHTML = '<td colspan="5" class="text-center">No products found for this supplier</td>';
+                    supplierProductsTable.appendChild(row);
+                }
+                
+                // Show the modal
+                document.getElementById('supplierDetailsModal').classList.add('active');
+            }
+        }
+
+        // Save supplier (add new or update existing)
+        function saveSupplier() {
+            const form = document.getElementById('supplierForm');
+            
+            // Basic form validation
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const supplierId = document.getElementById('supplierId').value;
+            
+            const supplierData = {
+                companyName: document.getElementById('companyName').value,
+                contactName: document.getElementById('contactName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                postalCode: document.getElementById('postalCode').value,
+                country: document.getElementById('country').value,
+                status: document.getElementById('status').value
+            };
+            
+            if (supplierId) {
+                // Update existing supplier
+                DB.update('suppliers', supplierId, supplierData);
+                showAlert('Supplier updated successfully!', 'success');
+            } else {
+                // Add new supplier
+                DB.add('suppliers', supplierData);
+                showAlert('Supplier added successfully!', 'success');
+            }
+            
+            closeSupplierModal();
+            loadSuppliers();
+        }
+
+        // Show delete confirmation modal
+        function showDeleteModal(supplierId) {
+            document.getElementById('deleteSupplierId').value = supplierId;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        // Delete supplier
+        function deleteSupplier() {
+            const supplierId = document.getElementById('deleteSupplierId').value;
+            
+            // Check if supplier has products
+            const products = DB.getAll('products').filter(product => product.supplierId === parseInt(supplierId));
+            
+            if (products.length > 0) {
+                showAlert('Cannot delete supplier with existing products!', 'danger');
+                closeDeleteModal();
+                return;
+            }
+            
+            if (DB.delete('suppliers', supplierId)) {
+                showAlert('Supplier deleted successfully!', 'success');
+            } else {
+                showAlert('Error deleting supplier!', 'danger');
+            }
+            
+            closeDeleteModal();
+            loadSuppliers();
+        }
+
+        // Close supplier modal
+        function closeSupplierModal() {
+            document.getElementById('supplierModal').classList.remove('active');
+        }
+
+        // Close delete confirmation modal
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+
+        // Close supplier details modal
+        function closeSupplierDetailsModal() {
+            document.getElementById('supplierDetailsModal').classList.remove('active');
+        }
+
+        // Show alert message
+        function showAlert(message, type) {
+            // Create alert element
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            // Add to the top of the main content
+            const container = document.querySelector('main .container');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

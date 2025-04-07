@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers - Smart Inventory and Order Management System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <a href="index.html">Smart Inventory</a>
+            </div>
+            <button class="nav-toggle" id="navToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav id="mainNav">
+                <ul>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                    <li><a href="products.html"><i class="fas fa-box"></i> Products</a></li>
+                    <li><a href="orders.html"><i class="fas fa-shopping-cart"></i> Orders</a></li>
+                    <li><a href="customers.html" class="active"><i class="fas fa-users"></i> Customers</a></li>
+                    <li><a href="suppliers.html"><i class="fas fa-truck"></i> Suppliers</a></li>
+                    <li><a href="reports.html"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                    <li><a href="notifications.html"><i class="fas fa-bell"></i> Notifications</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <div class="d-flex justify-between align-center mb-3">
+                <h1>Customers</h1>
+                <button class="btn btn-primary" id="addCustomerBtn">
+                    <i class="fas fa-plus"></i> Add New Customer
+                </button>
+            </div>
+            
+            <!-- Customers Table -->
+            <div class="table-container">
+                <div class="table-header">
+                    <h2 class="table-title">Customer Directory</h2>
+                    <div class="table-actions">
+                        <div class="form-group mb-0">
+                            <input type="text" id="customerSearch" placeholder="Search customers..." class="search-input">
+                        </div>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Location</th>
+                            <th>Type</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customersTable">
+                        <!-- Customers will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Add/Edit Customer Modal -->
+    <div class="modal-overlay" id="customerModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title" id="customerModalTitle">Add New Customer</h2>
+                <button class="modal-close" id="closeCustomerModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="customerForm">
+                    <input type="hidden" id="customerId">
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="firstName">First Name</label>
+                                <input type="text" id="firstName" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="lastName">Last Name</label>
+                                <input type="text" id="lastName" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input type="email" id="email" required>
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="phone">Phone</label>
+                                <input type="text" id="phone" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" id="city">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="state">State</label>
+                                <input type="text" id="state">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="postalCode">Postal Code</label>
+                                <input type="text" id="postalCode">
+                            </div>
+                        </div>
+                        <div class="form-col">
+                            <div class="form-group">
+                                <label for="country">Country</label>
+                                <input type="text" id="country">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="customerType">Customer Type</label>
+                        <select id="customerType" required>
+                            <option value="Regular">Regular</option>
+                            <option value="VIP">VIP</option>
+                            <option value="Wholesale">Wholesale</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="cancelCustomerBtn">Cancel</button>
+                <button class="btn btn-primary" id="saveCustomerBtn">Save Customer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Confirm Delete</h2>
+                <button class="modal-close" id="closeDeleteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this customer? This action cannot be undone.</p>
+                <input type="hidden" id="deleteCustomerId">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="cancelDeleteBtn">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customer Details Modal -->
+    <div class="modal-overlay" id="customerDetailsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">Customer Details</h2>
+                <button class="modal-close" id="closeCustomerDetailsModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="customer-info mb-3">
+                    <h3 class="mb-2" id="customerNameDisplay"></h3>
+                    <div class="d-flex gap-3 mb-2">
+                        <div>
+                            <h4 class="mb-1">Contact Information</h4>
+                            <p id="customerEmailDisplay"></p>
+                            <p id="customerPhoneDisplay"></p>
+                        </div>
+                        <div>
+                            <h4 class="mb-1">Address</h4>
+                            <p id="customerAddressDisplay"></p>
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <h4 class="mb-1">Customer Type</h4>
+                        <p><span class="badge" id="customerTypeBadge"></span></p>
+                    </div>
+                </div>
+                
+                <h3 class="mb-2">Order History</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Total Amount</th>
+                            <th>Status</th>
+                            <th>Payment Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerOrdersTable">
+                        <!-- Customer orders will be populated here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" id="closeDetailsBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Smart Inventory and Order Management System</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="js/main.js"></script>
+    <script>
+        // Initialize database on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            DB.init();
+            loadCustomers();
+            setupEventListeners();
+        });
+
+        // Load all customers into the table
+        function loadCustomers() {
+            const customersTable = document.getElementById('customersTable');
+            customersTable.innerHTML = ''; // Clear existing rows
+            
+            const customers = DB.getAll('customers');
+            
+            customers.forEach(customer => {
+                const row = document.createElement('tr');
+                
+                // Create customer type badge class
+                let typeBadgeClass = '';
+                switch(customer.customerType) {
+                    case 'Regular': typeBadgeClass = 'badge-info'; break;
+                    case 'VIP': typeBadgeClass = 'badge-success'; break;
+                    case 'Wholesale': typeBadgeClass = 'badge-warning'; break;
+                    default: typeBadgeClass = 'badge-info';
+                }
+                
+                row.innerHTML = `
+                    <td>${customer.id}</td>
+                    <td>${customer.firstName} ${customer.lastName}</td>
+                    <td>${customer.email}</td>
+                    <td>${customer.phone}</td>
+                    <td>${customer.city || ''}, ${customer.state || ''}</td>
+                    <td><span class="badge ${typeBadgeClass}">${customer.customerType}</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-info view-customer" data-id="${customer.id}">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="btn btn-sm btn-primary edit-customer" data-id="${customer.id}">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-danger delete-customer" data-id="${customer.id}">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+                
+                customersTable.appendChild(row);
+            });
+            
+            // Add event listeners to buttons
+            document.querySelectorAll('.view-customer').forEach(button => {
+                button.addEventListener('click', function() {
+                    const customerId = this.getAttribute('data-id');
+                    viewCustomerDetails(customerId);
+                });
+            });
+            
+            document.querySelectorAll('.edit-customer').forEach(button => {
+                button.addEventListener('click', function() {
+                    const customerId = this.getAttribute('data-id');
+                    editCustomer(customerId);
+                });
+            });
+            
+            document.querySelectorAll('.delete-customer').forEach(button => {
+                button.addEventListener('click', function() {
+                    const customerId = this.getAttribute('data-id');
+                    showDeleteModal(customerId);
+                });
+            });
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Add customer button
+            document.getElementById('addCustomerBtn').addEventListener('click', showAddCustomerModal);
+            
+            // Save customer button
+            document.getElementById('saveCustomerBtn').addEventListener('click', saveCustomer);
+            
+            // Cancel buttons and close buttons for modals
+            document.getElementById('cancelCustomerBtn').addEventListener('click', closeCustomerModal);
+            document.getElementById('closeCustomerModal').addEventListener('click', closeCustomerModal);
+            document.getElementById('cancelDeleteBtn').addEventListener('click', closeDeleteModal);
+            document.getElementById('closeDeleteModal').addEventListener('click', closeDeleteModal);
+            document.getElementById('closeCustomerDetailsModal').addEventListener('click', closeCustomerDetailsModal);
+            document.getElementById('closeDetailsBtn').addEventListener('click', closeCustomerDetailsModal);
+            
+            // Confirm delete button
+            document.getElementById('confirmDeleteBtn').addEventListener('click', deleteCustomer);
+            
+            // Search functionality
+            document.getElementById('customerSearch').addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+                const rows = document.querySelectorAll('#customersTable tr');
+                
+                rows.forEach(row => {
+                    const name = row.cells[1].textContent.toLowerCase();
+                    const email = row.cells[2].textContent.toLowerCase();
+                    const phone = row.cells[3].textContent.toLowerCase();
+                    
+                    if (name.includes(searchTerm) || email.includes(searchTerm) || phone.includes(searchTerm)) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+            
+            // Mobile navigation toggle
+            document.getElementById('navToggle').addEventListener('click', function() {
+                document.getElementById('mainNav').classList.toggle('active');
+            });
+        }
+
+        // Show modal to add a new customer
+        function showAddCustomerModal() {
+            document.getElementById('customerModalTitle').textContent = 'Add New Customer';
+            document.getElementById('customerForm').reset();
+            document.getElementById('customerId').value = '';
+            document.getElementById('customerModal').classList.add('active');
+        }
+
+        // Show modal to edit an existing customer
+        function editCustomer(customerId) {
+            const customer = DB.getById('customers', customerId);
+            
+            if (customer) {
+                document.getElementById('customerModalTitle').textContent = 'Edit Customer';
+                
+                // Fill the form with customer data
+                document.getElementById('customerId').value = customer.id;
+                document.getElementById('firstName').value = customer.firstName;
+                document.getElementById('lastName').value = customer.lastName;
+                document.getElementById('email').value = customer.email;
+                document.getElementById('phone').value = customer.phone;
+                document.getElementById('address').value = customer.address || '';
+                document.getElementById('city').value = customer.city || '';
+                document.getElementById('state').value = customer.state || '';
+                document.getElementById('postalCode').value = customer.postalCode || '';
+                document.getElementById('country').value = customer.country || '';
+                document.getElementById('customerType').value = customer.customerType;
+                
+                document.getElementById('customerModal').classList.add('active');
+            }
+        }
+
+        // View customer details
+        function viewCustomerDetails(customerId) {
+            const customer = DB.getById('customers', customerId);
+            const orders = DB.getAll('orders').filter(order => order.customerId === parseInt(customerId));
+            
+            if (customer) {
+                // Set customer information
+                document.getElementById('customerNameDisplay').textContent = `${customer.firstName} ${customer.lastName}`;
+                document.getElementById('customerEmailDisplay').textContent = `Email: ${customer.email}`;
+                document.getElementById('customerPhoneDisplay').textContent = `Phone: ${customer.phone}`;
+                
+                // Set address
+                let addressText = '';
+                if (customer.address) addressText += `${customer.address}<br>`;
+                if (customer.city || customer.state) {
+                    addressText += `${customer.city || ''}, ${customer.state || ''} ${customer.postalCode || ''}<br>`;
+                }
+                if (customer.country) addressText += customer.country;
+                
+                document.getElementById('customerAddressDisplay').innerHTML = addressText || 'No address provided';
+                
+                // Set customer type badge
+                const customerTypeBadge = document.getElementById('customerTypeBadge');
+                customerTypeBadge.textContent = customer.customerType;
+                customerTypeBadge.className = 'badge';
+                
+                switch(customer.customerType) {
+                    case 'Regular': customerTypeBadge.classList.add('badge-info'); break;
+                    case 'VIP': customerTypeBadge.classList.add('badge-success'); break;
+                    case 'Wholesale': customerTypeBadge.classList.add('badge-warning'); break;
+                    default: customerTypeBadge.classList.add('badge-info');
+                }
+                
+                // Set order history
+                const customerOrdersTable = document.getElementById('customerOrdersTable');
+                customerOrdersTable.innerHTML = '';
+                
+                if (orders.length > 0) {
+                    // Sort orders by date (newest first)
+                    orders.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
+                    
+                    orders.forEach(order => {
+                        const row = document.createElement('tr');
+                        
+                        // Format date
+                        const orderDate = new Date(order.orderDate);
+                        const formattedDate = orderDate.toLocaleDateString() + ' ' + orderDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        
+                        // Create status badge class based on order status
+                        let statusBadgeClass = '';
+                        switch(order.status) {
+                            case 'Delivered': statusBadgeClass = 'badge-success'; break;
+                            case 'Processing': statusBadgeClass = 'badge-info'; break;
+                            case 'Pending': statusBadgeClass = 'badge-warning'; break;
+                            case 'Cancelled': statusBadgeClass = 'badge-danger'; break;
+                            default: statusBadgeClass = 'badge-info';
+                        }
+                        
+                        // Create payment badge class based on payment status
+                        let paymentBadgeClass = '';
+                        switch(order.paymentStatus) {
+                            case 'Paid': paymentBadgeClass = 'badge-success'; break;
+                            case 'Partial': paymentBadgeClass = 'badge-warning'; break;
+                            case 'Unpaid': paymentBadgeClass = 'badge-danger'; break;
+                            default: paymentBadgeClass = 'badge-info';
+                        }
+                        
+                        row.innerHTML = `
+                            <td>#${order.id}</td>
+                            <td>${formattedDate}</td>
+                            <td>$${order.totalAmount.toFixed(2)}</td>
+                            <td><span class="badge ${statusBadgeClass}">${order.status}</span></td>
+                            <td><span class="badge ${paymentBadgeClass}">${order.paymentStatus}</span></td>
+                        `;
+                        
+                        customerOrdersTable.appendChild(row);
+                    });
+                } else {
+                    const row = document.createElement('tr');
+                    row.innerHTML = '<td colspan="5" class="text-center">No orders found for this customer</td>';
+                    customerOrdersTable.appendChild(row);
+                }
+                
+                // Show the modal
+                document.getElementById('customerDetailsModal').classList.add('active');
+            }
+        }
+
+        // Save customer (add new or update existing)
+        function saveCustomer() {
+            const form = document.getElementById('customerForm');
+            
+            // Basic form validation
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            
+            const customerId = document.getElementById('customerId').value;
+            
+            const customerData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                address: document.getElementById('address').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                postalCode: document.getElementById('postalCode').value,
+                country: document.getElementById('country').value,
+                customerType: document.getElementById('customerType').value
+            };
+            
+            if (customerId) {
+                // Update existing customer
+                DB.update('customers', customerId, customerData);
+                showAlert('Customer updated successfully!', 'success');
+            } else {
+                // Add new customer
+                DB.add('customers', customerData);
+                showAlert('Customer added successfully!', 'success');
+            }
+            
+            closeCustomerModal();
+            loadCustomers();
+        }
+
+        // Show delete confirmation modal
+        function showDeleteModal(customerId) {
+            document.getElementById('deleteCustomerId').value = customerId;
+            document.getElementById('deleteModal').classList.add('active');
+        }
+
+        // Delete customer
+        function deleteCustomer() {
+            const customerId = document.getElementById('deleteCustomerId').value;
+            
+            // Check if customer has orders
+            const orders = DB.getAll('orders').filter(order => order.customerId === parseInt(customerId));
+            
+            if (orders.length > 0) {
+                showAlert('Cannot delete customer with existing orders!', 'danger');
+                closeDeleteModal();
+                return;
+            }
+            
+            if (DB.delete('customers', customerId)) {
+                showAlert('Customer deleted successfully!', 'success');
+            } else {
+                showAlert('Error deleting customer!', 'danger');
+            }
+            
+            closeDeleteModal();
+            loadCustomers();
+        }
+
+        // Close customer modal
+        function closeCustomerModal() {
+            document.getElementById('customerModal').classList.remove('active');
+        }
+
+        // Close delete confirmation modal
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('active');
+        }
+
+        // Close customer details modal
+        function closeCustomerDetailsModal() {
+            document.getElementById('customerDetailsModal').classList.remove('active');
+        }
+
+        // Show alert message
+        function showAlert(message, type) {
+            // Create alert element
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.textContent = message;
+            
+            // Add to the top of the main content
+            const container = document.querySelector('main .container');
+            container.insertBefore(alertDiv, container.firstChild);
+            
+            // Remove after 3 seconds
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
