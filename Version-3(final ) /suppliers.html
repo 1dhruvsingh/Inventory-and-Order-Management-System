@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suppliers - Smart Inventory & Order Management System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>SIOMS</h2>
+                <p>Smart Inventory & Order Management</p>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="index.html">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="products.html">
+                        <i class="fas fa-box"></i>
+                        <span>Products</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="orders.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Orders</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="customers.html">
+                        <i class="fas fa-users"></i>
+                        <span>Customers</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="suppliers.html">
+                        <i class="fas fa-truck"></i>
+                        <span>Suppliers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reports.html">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="notifications.html">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="#" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+
+        <main class="content">
+            <header class="content-header">
+                <div class="header-left">
+                    <button id="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Suppliers</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span>Welcome, Admin</span>
+                        <img src="https://via.placeholder.com/40" alt="User Avatar">
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="dashboard-row">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Add New Supplier</h2>
+                        </div>
+                        <div class="card-content">
+                            <form id="add-supplier-form">
+                                <div class="form-group">
+                                    <label for="supplier-company">Company Name</label>
+                                    <input type="text" id="supplier-company" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="supplier-contact">Contact Name</label>
+                                    <input type="text" id="supplier-contact" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="supplier-email">Email</label>
+                                    <input type="email" id="supplier-email" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="supplier-phone">Phone</label>
+                                    <input type="tel" id="supplier-phone" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="supplier-address">Address</label>
+                                    <input type="text" id="supplier-address" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="supplier-city">City</label>
+                                    <input type="text" id="supplier-city" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="supplier-state">State</label>
+                                    <input type="text" id="supplier-state" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Add Supplier</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Supplier Statistics</h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="stats-cards">
+                                <div class="stat-card">
+                                    <div class="stat-card-icon" style="background-color: #3498db;">
+                                        <i class="fas fa-truck"></i>
+                                    </div>
+                                    <div class="stat-card-info">
+                                        <h3>Total Suppliers</h3>
+                                        <p class="stat-value">3</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-card-icon" style="background-color: #2ecc71;">
+                                        <i class="fas fa-box"></i>
+                                    </div>
+                                    <div class="stat-card-info">
+                                        <h3>Products Supplied</h3>
+                                        <p class="stat-value">5</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-card-icon" style="background-color: #9b59b6;">
+                                        <i class="fas fa-dollar-sign"></i>
+                                    </div>
+                                    <div class="stat-card-info">
+                                        <h3>Total Spending</h3>
+                                        <p class="stat-value">$1,125.00</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2>All Suppliers</h2>
+                    </div>
+                    <div class="card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Company</th>
+                                    <th>Contact</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Address</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="suppliers-table-body">
+                                <!-- Suppliers will be loaded dynamically via JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

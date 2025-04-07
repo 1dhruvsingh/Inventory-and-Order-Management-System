@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - Smart Inventory & Order Management System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>SIOMS</h2>
+                <p>Smart Inventory & Order Management</p>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="index.html">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="products.html">
+                        <i class="fas fa-box"></i>
+                        <span>Products</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="orders.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Orders</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="customers.html">
+                        <i class="fas fa-users"></i>
+                        <span>Customers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="suppliers.html">
+                        <i class="fas fa-truck"></i>
+                        <span>Suppliers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="reports.html">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="notifications.html">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="#" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+
+        <main class="content">
+            <header class="content-header">
+                <div class="header-left">
+                    <button id="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Notifications</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span>Welcome, Admin</span>
+                        <img src="https://via.placeholder.com/40" alt="User Avatar">
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2>All Notifications</h2>
+                        <button id="mark-all-read" class="btn-small">Mark All as Read</button>
+                    </div>
+                    <div class="card-content">
+                        <ul class="notification-list" id="notifications-list">
+                            <li class="notification warning">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <div class="notification-content">
+                                    <h3>Low Stock Alert</h3>
+                                    <p>Office Desk is running low on stock</p>
+                                    <span class="notification-time">2 hours ago</span>
+                                </div>
+                                <button class="btn-small mark-read" data-id="1">Mark as Read</button>
+                            </li>
+                            <li class="notification info">
+                                <i class="fas fa-info-circle"></i>
+                                <div class="notification-content">
+                                    <h3>New Order</h3>
+                                    <p>New order #ORD-001 has been placed</p>
+                                    <span class="notification-time">Today</span>
+                                </div>
+                                <button class="btn-small mark-read" data-id="2">Mark as Read</button>
+                            </li>
+                            <li class="notification success">
+                                <i class="fas fa-check-circle"></i>
+                                <div class="notification-content">
+                                    <h3>Payment Received</h3>
+                                    <p>Payment for order #ORD-003 has been received</p>
+                                    <span class="notification-time">Yesterday</span>
+                                </div>
+                                <button class="btn-small mark-read" data-id="3">Mark as Read</button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="dashboard-row">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Notification Settings</h2>
+                        </div>
+                        <div class="card-content">
+                            <form id="notification-settings-form">
+                                <div class="form-group">
+                                    <label>Email Notifications</label>
+                                    <div class="d-flex align-center">
+                                        <input type="checkbox" id="email-notifications" checked>
+                                        <label for="email-notifications" class="ml-10">Receive notifications via email</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Notification Types</label>
+                                    <div class="d-flex align-center">
+                                        <input type="checkbox" id="low-stock-notifications" checked>
+                                        <label for="low-stock-notifications" class="ml-10">Low Stock Alerts</label>
+                                    </div>
+                                    <div class="d-flex align-center">
+                                        <input type="checkbox" id="order-notifications" checked>
+                                        <label for="order-notifications" class="ml-10">Order Updates</label>
+                                    </div>
+                                    <div class="d-flex align-center">
+                                        <input type="checkbox" id="payment-notifications" checked>
+                                        <label for="payment-notifications" class="ml-10">Payment Confirmations</label>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Save Settings</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Notification Statistics</h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="stats-cards">
+                                <div class="stat-card">
+                                    <div class="stat-card-icon" style="background-color: #4CAF50;">
+                                        <i class="fas fa-bell"></i>
+                                    </div>
+                                    <div class="stat-card-info">
+                                        <h3>Total Notifications</h3>
+                                        <p class="stat-value">24</p>
+                                        <p class="stat-change">Last 30 days</p>
+                                    </div>
+                                </div>
+                                <div class="stat-card">
+                                    <div class="stat-card-icon" style="background-color: #F44336;">
+                                        <i class="fas fa-exclamation-circle"></i>
+                                    </div>
+                                    <div class="stat-card-info">
+                                        <h3>Alerts</h3>
+                                        <p class="stat-value">8</p>
+                                        <p class="stat-change">Last 30 days</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

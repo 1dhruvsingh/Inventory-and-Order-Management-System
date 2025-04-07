@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Smart Inventory & Order Management System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <h2>SIOMS</h2>
+                <p>Smart Inventory & Order Management</p>
+            </div>
+            <ul class="nav-links">
+                <li>
+                    <a href="index.html">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="products.html">
+                        <i class="fas fa-box"></i>
+                        <span>Products</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="orders.html">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Orders</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="customers.html">
+                        <i class="fas fa-users"></i>
+                        <span>Customers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="suppliers.html">
+                        <i class="fas fa-truck"></i>
+                        <span>Suppliers</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="reports.html">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="notifications.html">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="#" id="logout-btn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </nav>
+
+        <main class="content">
+            <header class="content-header">
+                <div class="header-left">
+                    <button id="sidebar-toggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                    <h1>Reports</h1>
+                </div>
+                <div class="header-right">
+                    <div class="user-info">
+                        <span>Welcome, Admin</span>
+                        <img src="https://via.placeholder.com/40" alt="User Avatar">
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="dashboard-row">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Generate Report</h2>
+                        </div>
+                        <div class="card-content">
+                            <form id="generate-report-form">
+                                <div class="form-group">
+                                    <label for="report-type">Report Type</label>
+                                    <select id="report-type" class="form-control" required>
+                                        <option value="">Select Report Type</option>
+                                        <option value="Sales">Sales Report</option>
+                                        <option value="Inventory">Inventory Status Report</option>
+                                        <option value="Customer">Customer Purchase History</option>
+                                        <option value="Supplier">Supplier Performance Report</option>
+                                        <option value="Financial">Financial Summary</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="report-format">Report Format</label>
+                                    <select id="report-format" class="form-control" required>
+                                        <option value="">Select Format</option>
+                                        <option value="PDF">PDF</option>
+                                        <option value="Excel">Excel</option>
+                                        <option value="CSV">CSV</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="report-start-date">Start Date</label>
+                                    <input type="date" id="report-start-date" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="report-end-date">End Date</label>
+                                    <input type="date" id="report-end-date" class="form-control" required>
+                                </div>
+                                <div class="form-group">
+                                    <button type="submit" class="btn btn-primary">Generate Report</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h2>Report Templates</h2>
+                        </div>
+                        <div class="card-content">
+                            <div class="quick-actions-grid">
+                                <a href="#" class="quick-action-btn" data-report="sales-monthly">
+                                    <i class="fas fa-chart-line"></i>
+                                    <span>Monthly Sales</span>
+                                </a>
+                                <a href="#" class="quick-action-btn" data-report="inventory-status">
+                                    <i class="fas fa-boxes"></i>
+                                    <span>Inventory Status</span>
+                                </a>
+                                <a href="#" class="quick-action-btn" data-report="top-customers">
+                                    <i class="fas fa-user-friends"></i>
+                                    <span>Top Customers</span>
+                                </a>
+                                <a href="#" class="quick-action-btn" data-report="low-stock">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <span>Low Stock Alert</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h2>Generated Reports</h2>
+                    </div>
+                    <div class="card-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Report Name</th>
+                                    <th>Generated Date</th>
+                                    <th>Format</th>
+                                    <th>Generated By</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reports-table-body">
+                                <tr>
+                                    <td>Monthly Sales Report - August 2023</td>
+                                    <td>Aug 31, 2023</td>
+                                    <td>PDF</td>
+                                    <td>Admin</td>
+                                    <td><span class="status completed">Completed</span></td>
+                                    <td>
+                                        <button class="btn-small">Download</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Inventory Status Report</td>
+                                    <td>Aug 25, 2023</td>
+                                    <td>Excel</td>
+                                    <td>Admin</td>
+                                    <td><span class="status completed">Completed</span></td>
+                                    <td>
+                                        <button class="btn-small">Download</button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Customer Purchase History</td>
+                                    <td>Aug 20, 2023</td>
+                                    <td>PDF</td>
+                                    <td>Admin</td>
+                                    <td><span class="status completed">Completed</span></td>
+                                    <td>
+                                        <button class="btn-small">Download</button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
