@@ -1,0 +1,170 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="800" viewBox="0 0 1000 800">
+  <!-- Styles -->
+  <style>
+    .entity { fill: #e6f3ff; stroke: #3498db; stroke-width: 2; }
+    .entity-title { fill: #3498db; font-family: Arial; font-size: 14px; font-weight: bold; }
+    .entity-attribute { fill: #333; font-family: Arial; font-size: 12px; }
+    .pk { font-weight: bold; }
+    .fk { font-style: italic; }
+    .relationship { stroke: #34495e; stroke-width: 2; fill: none; }
+    .relationship-text { fill: #34495e; font-family: Arial; font-size: 12px; }
+    .cardinality { fill: #34495e; font-family: Arial; font-size: 12px; font-weight: bold; }
+  </style>
+
+  <!-- Entities -->
+  <!-- Users Entity -->
+  <rect x="50" y="50" width="180" height="160" rx="5" class="entity" />
+  <text x="140" y="75" text-anchor="middle" class="entity-title">Users</text>
+  <line x1="50" y1="85" x2="230" y2="85" stroke="#3498db" stroke-width="2" />
+  <text x="60" y="105" class="entity-attribute pk">user_id (PK)</text>
+  <text x="60" y="125" class="entity-attribute">username</text>
+  <text x="60" y="145" class="entity-attribute">password</text>
+  <text x="60" y="165" class="entity-attribute">email</text>
+  <text x="60" y="185" class="entity-attribute">role</text>
+  <text x="60" y="205" class="entity-attribute">status</text>
+
+  <!-- Products Entity -->
+  <rect x="400" y="50" width="180" height="180" rx="5" class="entity" />
+  <text x="490" y="75" text-anchor="middle" class="entity-title">Products</text>
+  <line x1="400" y1="85" x2="580" y2="85" stroke="#3498db" stroke-width="2" />
+  <text x="410" y="105" class="entity-attribute pk">product_id (PK)</text>
+  <text x="410" y="125" class="entity-attribute">product_name</text>
+  <text x="410" y="145" class="entity-attribute">description</text>
+  <text x="410" y="165" class="entity-attribute">category</text>
+  <text x="410" y="185" class="entity-attribute">unit_price</text>
+  <text x="410" y="205" class="entity-attribute">stock_quantity</text>
+  <text x="410" y="225" class="entity-attribute fk">supplier_id (FK)</text>
+
+  <!-- Suppliers Entity -->
+  <rect x="750" y="50" width="180" height="160" rx="5" class="entity" />
+  <text x="840" y="75" text-anchor="middle" class="entity-title">Suppliers</text>
+  <line x1="750" y1="85" x2="930" y2="85" stroke="#3498db" stroke-width="2" />
+  <text x="760" y="105" class="entity-attribute pk">supplier_id (PK)</text>
+  <text x="760" y="125" class="entity-attribute">supplier_name</text>
+  <text x="760" y="145" class="entity-attribute">contact_person</text>
+  <text x="760" y="165" class="entity-attribute">email</text>
+  <text x="760" y="185" class="entity-attribute">phone</text>
+  <text x="760" y="205" class="entity-attribute">address</text>
+
+  <!-- Customers Entity -->
+  <rect x="50" y="300" width="180" height="160" rx="5" class="entity" />
+  <text x="140" y="325" text-anchor="middle" class="entity-title">Customers</text>
+  <line x1="50" y1="335" x2="230" y2="335" stroke="#3498db" stroke-width="2" />
+  <text x="60" y="355" class="entity-attribute pk">customer_id (PK)</text>
+  <text x="60" y="375" class="entity-attribute">customer_name</text>
+  <text x="60" y="395" class="entity-attribute">email</text>
+  <text x="60" y="415" class="entity-attribute">phone</text>
+  <text x="60" y="435" class="entity-attribute">address</text>
+  <text x="60" y="455" class="entity-attribute">status</text>
+
+  <!-- Orders Entity -->
+  <rect x="400" y="300" width="180" height="180" rx="5" class="entity" />
+  <text x="490" y="325" text-anchor="middle" class="entity-title">Orders</text>
+  <line x1="400" y1="335" x2="580" y2="335" stroke="#3498db" stroke-width="2" />
+  <text x="410" y="355" class="entity-attribute pk">order_id (PK)</text>
+  <text x="410" y="375" class="entity-attribute fk">customer_id (FK)</text>
+  <text x="410" y="395" class="entity-attribute fk">user_id (FK)</text>
+  <text x="410" y="415" class="entity-attribute">order_date</text>
+  <text x="410" y="435" class="entity-attribute">total_amount</text>
+  <text x="410" y="455" class="entity-attribute">status</text>
+  <text x="410" y="475" class="entity-attribute">shipping_address</text>
+
+  <!-- OrderDetails Entity -->
+  <rect x="750" y="300" width="180" height="160" rx="5" class="entity" />
+  <text x="840" y="325" text-anchor="middle" class="entity-title">OrderDetails</text>
+  <line x1="750" y1="335" x2="930" y2="335" stroke="#3498db" stroke-width="2" />
+  <text x="760" y="355" class="entity-attribute pk">order_detail_id (PK)</text>
+  <text x="760" y="375" class="entity-attribute fk">order_id (FK)</text>
+  <text x="760" y="395" class="entity-attribute fk">product_id (FK)</text>
+  <text x="760" y="415" class="entity-attribute">quantity</text>
+  <text x="760" y="435" class="entity-attribute">unit_price</text>
+  <text x="760" y="455" class="entity-attribute">subtotal</text>
+
+  <!-- Payments Entity -->
+  <rect x="50" y="550" width="180" height="160" rx="5" class="entity" />
+  <text x="140" y="575" text-anchor="middle" class="entity-title">Payments</text>
+  <line x1="50" y1="585" x2="230" y2="585" stroke="#3498db" stroke-width="2" />
+  <text x="60" y="605" class="entity-attribute pk">payment_id (PK)</text>
+  <text x="60" y="625" class="entity-attribute fk">order_id (FK)</text>
+  <text x="60" y="645" class="entity-attribute">payment_date</text>
+  <text x="60" y="665" class="entity-attribute">amount</text>
+  <text x="60" y="685" class="entity-attribute">payment_method</text>
+  <text x="60" y="705" class="entity-attribute">status</text>
+
+  <!-- StockLogs Entity -->
+  <rect x="400" y="550" width="180" height="160" rx="5" class="entity" />
+  <text x="490" y="575" text-anchor="middle" class="entity-title">StockLogs</text>
+  <line x1="400" y1="585" x2="580" y2="585" stroke="#3498db" stroke-width="2" />
+  <text x="410" y="605" class="entity-attribute pk">log_id (PK)</text>
+  <text x="410" y="625" class="entity-attribute fk">product_id (FK)</text>
+  <text x="410" y="645" class="entity-attribute fk">user_id (FK)</text>
+  <text x="410" y="665" class="entity-attribute">change_quantity</text>
+  <text x="410" y="685" class="entity-attribute">change_type</text>
+  <text x="410" y="705" class="entity-attribute">log_date</text>
+
+  <!-- Notifications Entity -->
+  <rect x="750" y="550" width="180" height="160" rx="5" class="entity" />
+  <text x="840" y="575" text-anchor="middle" class="entity-title">Notifications</text>
+  <line x1="750" y1="585" x2="930" y2="585" stroke="#3498db" stroke-width="2" />
+  <text x="760" y="605" class="entity-attribute pk">notification_id (PK)</text>
+  <text x="760" y="625" class="entity-attribute fk">user_id (FK)</text>
+  <text x="760" y="645" class="entity-attribute">title</text>
+  <text x="760" y="665" class="entity-attribute">message</text>
+  <text x="760" y="685" class="entity-attribute">type</text>
+  <text x="760" y="705" class="entity-attribute">is_read</text>
+
+  <!-- Relationships -->
+  <!-- Suppliers to Products -->
+  <path d="M 750 130 L 580 130" class="relationship" />
+  <text x="665" y="120" text-anchor="middle" class="relationship-text">supplies</text>
+  <text x="740" y="125" text-anchor="end" class="cardinality">1</text>
+  <text x="590" y="125" text-anchor="start" class="cardinality">N</text>
+
+  <!-- Users to Orders -->
+  <path d="M 140 210 L 140 250 L 490 250 L 490 300" class="relationship" />
+  <text x="315" y="240" text-anchor="middle" class="relationship-text">creates</text>
+  <text x="145" y="225" text-anchor="start" class="cardinality">1</text>
+  <text x="485" y="295" text-anchor="end" class="cardinality">N</text>
+
+  <!-- Customers to Orders -->
+  <path d="M 230 380 L 400 380" class="relationship" />
+  <text x="315" y="370" text-anchor="middle" class="relationship-text">places</text>
+  <text x="240" y="375" text-anchor="start" class="cardinality">1</text>
+  <text x="390" y="375" text-anchor="end" class="cardinality">N</text>
+
+  <!-- Orders to OrderDetails -->
+  <path d="M 580 380 L 750 380" class="relationship" />
+  <text x="665" y="370" text-anchor="middle" class="relationship-text">contains</text>
+  <text x="590" y="375" text-anchor="start" class="cardinality">1</text>
+  <text x="740" y="375" text-anchor="end" class="cardinality">N</text>
+
+  <!-- Products to OrderDetails -->
+  <path d="M 490 230 L 490 270 L 840 270 L 840 300" class="relationship" />
+  <text x="665" y="260" text-anchor="middle" class="relationship-text">included in</text>
+  <text x="495" y="245" text-anchor="start" class="cardinality">1</text>
+  <text x="835" y="295" text-anchor="end" class="cardinality">N</text>
+
+  <!-- Orders to Payments -->
+  <path d="M 490 480 L 490 520 L 140 520 L 140 550" class="relationship" />
+  <text x="315" y="510" text-anchor="middle" class="relationship-text">receives</text>
+  <text x="485" y="495" text-anchor="end" class="cardinality">1</text>
+  <text x="145" y="545" text-anchor="start" class="cardinality">N</text>
+
+  <!-- Products to StockLogs -->
+  <path d="M 580 180 L 650 180 L 650 630 L 580 630" class="relationship" />
+  <text x="650" y="400" text-anchor="middle" class="relationship-text">tracks</text>
+  <text x="590" y="175" text-anchor="start" class="cardinality">1</text>
+  <text x="590" y="625" text-anchor="start" class="cardinality">N</text>
+
+  <!-- Users to StockLogs -->
+  <path d="M 50 130 L 20 130 L 20 630 L 400 630" class="relationship" />
+  <text x="20" y="380" text-anchor="middle" class="relationship-text">records</text>
+  <text x="45" y="125" text-anchor="end" class="cardinality">1</text>
+  <text x="390" y="625" text-anchor="end" class="cardinality">N</text>
+
+  <!-- Users to Notifications -->
+  <path d="M 230 130 L 980 130 L 980 630 L 930 630" class="relationship" />
+  <text x="980" y="380" text-anchor="middle" class="relationship-text">receives</text>
+  <text x="240" y="125" text-anchor="start" class="cardinality">1</text>
+  <text x="920" y="625" text-anchor="end" class="cardinality">N</text>
+</svg>
