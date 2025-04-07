@@ -1,6 +1,8 @@
 # Smart Inventory and Order Management System
 
-A full-stack web-based system that allows businesses to manage inventory, customers, suppliers, orders, and payments with real-time updates and reporting capabilities.
+A full-stack web-based system that allows businesses to manage inventory, customers, suppliers, orders, and payments with real-time updates and reporting capabilities. This version is simplified for educational purposes, focusing on database management concepts.
+
+> **Note for Database Management Course**: This project has been simplified to focus on database interactions and management. The authentication system has been intentionally simplified for educational purposes, and the backend requirements are minimal. You can run this project locally with MySQL Workbench on your MacBook.
 
 ## Project Overview
 
@@ -68,6 +70,60 @@ The Smart Inventory and Order Management System addresses common challenges face
 - **Order Status Updates**: Real-time notifications on order progress
 - **Payment Confirmations**: Alerts for payment receipts and issues
 - **System Notifications**: Important system-wide announcements
+
+## Quick Setup for Database Management Course
+
+### Prerequisites
+
+- Node.js (v14 or higher)
+- MySQL Workbench (installed on your MacBook)
+- MySQL Server (running locally)
+
+### Database Setup
+
+1. Open MySQL Workbench and connect to your local MySQL server
+2. Create a new schema named `inventory_management`
+3. Run the SQL scripts in the `database` folder:
+   - First run `schema.sql` to create the database structure
+   - Then run `seed.sql` to populate the database with sample data
+
+### Backend Setup
+
+1. Navigate to the `backend` directory
+2. Create a `.env` file with the following content (adjust as needed):
+   ```
+   PORT=3000
+   DB_HOST=localhost
+   DB_USER=root
+   DB_PASSWORD=your_mysql_password
+   DB_NAME=inventory_management
+   ```
+3. Install dependencies:
+   ```
+   npm install
+   ```
+4. Start the server:
+   ```
+   npm start
+   ```
+
+### Frontend Setup
+
+The frontend is a simple HTML/CSS/JavaScript application that can be opened directly in a browser:
+
+1. With the backend server running, open the `frontend/login.html` file in your browser
+2. Use the following credentials to log in:
+   - Username: `admin`
+   - Password: any password will work (simplified for educational purposes)
+
+### Educational Notes
+
+This project is intentionally simplified for educational purposes. In a real-world application, you would implement:
+
+- Proper password hashing and authentication
+- Input validation and sanitization
+- Comprehensive error handling
+- More robust security measures
 
 ## System Architecture
 

@@ -1,5 +1,9 @@
 /**
  * Authentication JavaScript for handling user login and session management
+ * Simplified for Database Management Course
+ * 
+ * This version is intentionally simplified for educational purposes.
+ * It allows any password for login and focuses on database interactions.
  */
 
 // API URL - Change this to match your backend URL
@@ -12,6 +16,8 @@ const loginMessage = document.getElementById('loginMessage');
 const registerMessage = document.getElementById('registerMessage');
 const loginToggle = document.getElementById('loginToggle');
 const registerToggle = document.getElementById('registerToggle');
+const dbStatusElement = document.getElementById('dbStatus');
+const dbInstructionsElement = document.getElementById('dbInstructions');
 
 // Check if user is already logged in
 function checkAuth() {
@@ -39,6 +45,57 @@ if (loginToggle && registerToggle) {
     });
 }
 
+// Check database connection status
+async function checkDatabaseConnection() {
+    if (dbStatusElement) {
+        try {
+            const response = await fetch(`${API_URL}/`);
+            if (response.ok) {
+                dbStatusElement.textContent = 'Connected';
+                dbStatusElement.className = 'db-status connected';
+                return true;
+            } else {
+                dbStatusElement.textContent = 'Disconnected';
+                dbStatusElement.className = 'db-status disconnected';
+                showDatabaseInstructions();
+                return false;
+            }
+        } catch (error) {
+            dbStatusElement.textContent = 'Disconnected';
+            dbStatusElement.className = 'db-status disconnected';
+            showDatabaseInstructions();
+            return false;
+        }
+    }
+    return false;
+}
+
+// Show database setup instructions
+function showDatabaseInstructions() {
+    if (dbInstructionsElement) {
+        dbInstructionsElement.style.display = 'block';
+        dbInstructionsElement.innerHTML = `
+            <h3>Database Connection Instructions</h3>
+            <ol>
+                <li>Make sure MySQL is running on your MacBook</li>
+                <li>Open MySQL Workbench and connect to your local MySQL server</li>
+                <li>Run the SQL scripts in the 'database' folder:</li>
+                <ul>
+                    <li>First run <code>schema.sql</code> to create the database structure</li>
+                    <li>Then run <code>seed.sql</code> to populate the database with sample data</li>
+                </ul>
+                <li>Make sure the backend server is running:</li>
+                <ul>
+                    <li>Navigate to the backend directory in terminal</li>
+                    <li>Run <code>npm install</code> to install dependencies</li>
+                    <li>Run <code>npm start</code> to start the server</li>
+                </ul>
+                <li>Check that the database credentials in <code>backend/.env</code> match your MySQL setup</li>
+            </ol>
+        `;
+    }
+}
+
 // Handle login form submission
 if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
@@ -50,9 +107,15 @@ if (loginForm) {
         
         // Get form data
         const username = document.getElementById('username').value;
-        const password = document.getElementById('password').value;
+        const password = document.getElementById('password').value; // Password is not validated for educational purposes
         
         try {
+            // First check database connection
+            const isConnected = await checkDatabaseConnection();
+            if (!isConnected) {
+                throw new Error('Database connection failed. Please check your MySQL setup.');
+            }
+            
             // Send login request to API
             const response = await fetch(`${API_URL}/users/login`, {
                 method: 'POST',
@@ -154,8 +217,11 @@ function logout() {
     window.location.href = 'login.html';
 }
 
-// Check authentication status when page loads
-document.addEventListener('DOMContentLoaded', checkAuth);
+// Check authentication status and database connection when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
+    checkDatabaseConnection();
+});
 
 // Export functions for use in other scripts
 window.auth = {

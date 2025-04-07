@@ -29,6 +29,55 @@
         #registerForm {
             display: none;
         }
+        .db-status-container {
+            margin-bottom: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .db-status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .db-status.connected {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .db-status.disconnected {
+            background-color: #f44336;
+            color: white;
+        }
+        #dbInstructions {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            border-radius: 4px;
+        }
+        #dbInstructions h3 {
+            margin-top: 0;
+            color: #856404;
+        }
+        #dbInstructions code {
+            background-color: #f8f9fa;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .course-note {
+            background-color: #e8f4f8;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4361ee;
+        }
     </style>
 </head>
 <body>
@@ -38,6 +87,18 @@
                 <h1>Smart Inventory</h1>
                 <p>Management System</p>
             </div>
+            
+            <div class="course-note">
+                <strong>Database Management Course Project</strong>
+                <p>This is a simplified version for educational purposes. Any password will work for login.</p>
+            </div>
+            
+            <div class="db-status-container">
+                <span>Database Status:</span>
+                <span id="dbStatus" class="db-status">Checking...</span>
+            </div>
+            
+            <div id="dbInstructions"></div>
             
             <div class="form-toggle">
                 <button type="button" id="loginToggle" class="active">Login</button>

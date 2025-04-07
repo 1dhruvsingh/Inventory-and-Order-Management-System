@@ -59,17 +59,18 @@ const loginUser = async (req, res) => {
     const { username, password } = req.body;
 
     // Basic validation
-    if (!username || !password) {
-      return res.status(400).json({ message: 'Please provide username and password' });
+    if (!username) {
+      return res.status(400).json({ message: 'Please provide a username' });
     }
-
-    // For demonstration purposes, simplified login without complex JWT validation
+w
+    // For Database Management Course - extremely simplified login
+    // This is for educational purposes only - NEVER use this in production
     // Get user from database
     const [rows] = await User.getUserByUsername(username);
     const user = rows[0];
 
-    // Simple password check (for demonstration only)
-    if (user && password === user.password) {
+    // For educational purposes, if user exists, allow login with any password
+    if (user) {
       // Update last login
       await User.updateLastLogin(user.user_id);
 
@@ -82,11 +83,27 @@ const loginUser = async (req, res) => {
         role: user.role
       });
     } else {
-      res.status(401).json({ message: 'Invalid username or password' });
+      // If user doesn't exist, try to find any user for demonstration purposes
+      const [allUsers] = await User.getAllUsers();
+      if (allUsers && allUsers.length > 0) {
+        const demoUser = allUsers[0];
+        await User.updateLastLogin(demoUser.user_id);
+        
+        res.status(200).json({
+          user_id: demoUser.user_id,
+          username: demoUser.username,
+          email: demoUser.email,
+          full_name: demoUser.full_name,
+          role: demoUser.role,
+          note: 'Using demo user for educational purposes'
+        });
+      } else {
+        res.status(401).json({ message: 'No users found in database. Please run the seed.sql script.' });
+      }
     }
   } catch (error) {
     console.error('Error in loginUser:', error.message);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    res.status(500).json({ message: 'Database error. Make sure MySQL is running and properly configured.', error: error.message });
   }
 };
 

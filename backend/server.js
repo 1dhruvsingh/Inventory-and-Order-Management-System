@@ -1,7 +1,8 @@
 // Main server file for Smart Inventory and Order Management System
+// Simplified for Database Management Course
 const express = require('express');
 const cors = require('cors');
-const { testConnection } = require('./config/db');
+const { testConnection, pool } = require('./config/db');
 require('dotenv').config();
 
 // Import routes
@@ -23,9 +24,56 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Simple route for testing
-app.get('/', (req, res) => {
-  res.json({ message: 'Welcome to Smart Inventory and Order Management System API' });
+// Database status route - useful for educational purposes
+app.get('/', async (req, res) => {
+  try {
+    const connected = await testConnection();
+    if (connected) {
+      // Get some basic database stats for educational purposes
+      const [tables] = await pool.query(
+        "SELECT table_name, table_rows FROM information_schema.tables WHERE table_schema = 'inventory_management'"
+      );
+      
+      res.json({ 
+        status: 'success',
+        message: 'Database connected successfully!', 
+        database: 'inventory_management',
+        tables: tables.map(t => ({ name: t.table_name, rows: t.table_rows }))
+      });
+    } else {
+      res.status(500).json({ 
+        status: 'error',
+        message: 'Database connection failed. Please check your MySQL setup.' 
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ 
+      status: 'error',
+      message: 'Database connection failed: ' + error.message 
+    });
+  }
+});
+
+// Educational route to show database schema
+app.get('/api/schema', async (req, res) => {
+  try {
+    const [tables] = await pool.query(
+      "SELECT table_name FROM information_schema.tables WHERE table_schema = 'inventory_management'"
+    );
+    
+    const schema = {};
+    
+    for (const table of tables) {
+      const [columns] = await pool.query(
+        `SHOW COLUMNS FROM ${table.table_name}`
+      );
+      schema[table.table_name] = columns;
+    }
+    
+    res.json({ schema });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching schema: ' + error.message });
+  }
 });
 
 // API routes

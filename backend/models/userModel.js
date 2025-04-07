@@ -46,6 +46,8 @@ class User {
    * @returns {Promise<Object>} Created user object
    */
   static async createUser(userData) {
+    // For demonstration purposes only - no password hashing
+    // In a real application, ALWAYS hash passwords
     const { username, password, email, full_name, role, phone } = userData;
 
     try {
