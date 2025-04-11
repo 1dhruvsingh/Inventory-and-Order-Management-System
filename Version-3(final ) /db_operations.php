@@ -3,7 +3,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "sioms_db";
+$dbname = "inventory_management";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
